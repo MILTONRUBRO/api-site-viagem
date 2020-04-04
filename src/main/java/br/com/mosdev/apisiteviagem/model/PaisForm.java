@@ -16,6 +16,4 @@ public class PaisForm {
 	public String getNome() {
 		return nome;
 	}
-	
-
 }

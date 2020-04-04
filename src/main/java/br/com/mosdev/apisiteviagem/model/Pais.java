@@ -16,13 +16,13 @@ public class Pais {
 	private Long id;
 	private String nome;
 	
+	@Deprecated
+	public Pais() {
+		
+	}
+	
 	public Pais(@NotNull @NotEmpty String nome) {
 		this.nome = nome;
 	}
-
-	public String getNome() {
-		return nome;
-	}
-	
 
 }
