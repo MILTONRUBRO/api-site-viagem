@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -21,7 +23,7 @@ public class Rota {
 	@ManyToOne
 	private Aeroporto aeroportoDestino;
 	
-	private @NotNull @Positive int duracao;
+	private @NotNull @Positive Integer duracao;
 	
 	@Deprecated
 	public Rota() {
@@ -30,6 +32,13 @@ public class Rota {
 
 	public Rota(String nome, Aeroporto aeroportoOrigem, Aeroporto aeroportoDestino, @NotNull @Positive int duracao) {
 		this.nome= nome;
+		this.aeroportoOrigem = aeroportoOrigem;
+		this.aeroportoDestino = aeroportoDestino;
+		this.duracao = duracao;
+	}
+
+	public Rota(Aeroporto aeroportoOrigem, Aeroporto aeroportoDestino, @NotNull @Min(1) Integer duracao) {
+		this.nome = aeroportoOrigem.getNome() +  " - "  + aeroportoDestino.getNome();
 		this.aeroportoOrigem = aeroportoOrigem;
 		this.aeroportoDestino = aeroportoDestino;
 		this.duracao = duracao;
@@ -47,7 +56,7 @@ public class Rota {
 		return aeroportoDestino;
 	}
 
-	public int getDuracao() {
+	public Integer getDuracao() {
 		return duracao;
 	}
 
@@ -84,11 +93,6 @@ public class Rota {
 			return false;
 		if (duracao != other.duracao)
 			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
 		if (nome == null) {
 			if (other.nome != null)
 				return false;
@@ -97,5 +101,5 @@ public class Rota {
 		return true;
 	}
 	
-
+	
 }

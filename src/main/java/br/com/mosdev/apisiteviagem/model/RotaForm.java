@@ -1,9 +1,13 @@
 package br.com.mosdev.apisiteviagem.model;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import java.util.Optional;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import br.com.mosdev.apisiteviagem.errors.ResourceDuplicatedException;
 import br.com.mosdev.apisiteviagem.repository.AeroportoRepository;
+import br.com.mosdev.apisiteviagem.repository.RotaRepository;
 
 public class RotaForm {
 
@@ -16,8 +20,8 @@ public class RotaForm {
 	private Long idAeroportoDestino;
 
 	@NotNull
-	@Positive
-	private int duracao;
+	@Min(value=1)
+	private Integer duracao;
 
 	public String getNome() {
 		return nome;
@@ -43,21 +47,32 @@ public class RotaForm {
 		this.idAeroportoDestino = idAeroportoDestino;
 	}
 
-	public int getDuracao() {
+	public Integer getDuracao() {
 		return duracao;
 	}
 
-	public void setDuracao(int duracao) {
+	public void setDuracao(Integer duracao) {
 		this.duracao = duracao;
 	}
 
-	public Rota nova(AeroportoRepository aeroportoRepository) {
+	public Rota nova(AeroportoRepository aeroportoRepository, RotaRepository rotaRepository) {
 
 		Aeroporto aeroportoOrigem = aeroportoRepository.findById(idAeroportoOrigem).get();
 		Aeroporto aeroportoDestino = aeroportoRepository.findById(idAeroportoDestino).get();
+		
+		//verifica se já existe uma origem e destino cadastrado
+		Optional<Rota> possivelRota = rotaRepository.findByOrigemDestino(idAeroportoOrigem, idAeroportoDestino);
+		
+		
+		
+		if(idAeroportoOrigem ==  idAeroportoDestino || possivelRota.isPresent()) {
+			throw new ResourceDuplicatedException();
+		}
 
 		if (nome == null || nome.isEmpty()) {
-			nome = aeroportoOrigem.getNome() + " - " + aeroportoDestino.getNome();
+			//nome = aeroportoOrigem.getNome() + " - " + aeroportoDestino.getNome();
+			return new Rota(aeroportoOrigem, aeroportoDestino, duracao);
+			
 		}
 
 		return new Rota(nome, aeroportoOrigem, aeroportoDestino, duracao);
