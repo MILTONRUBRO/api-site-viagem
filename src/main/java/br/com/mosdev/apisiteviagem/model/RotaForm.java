@@ -5,6 +5,8 @@ import java.util.Optional;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.util.StringUtils;
+
 import br.com.mosdev.apisiteviagem.errors.ResourceDuplicatedException;
 import br.com.mosdev.apisiteviagem.repository.AeroportoRepository;
 import br.com.mosdev.apisiteviagem.repository.RotaRepository;
@@ -55,22 +57,13 @@ public class RotaForm {
 		this.duracao = duracao;
 	}
 
-	public Rota nova(AeroportoRepository aeroportoRepository, RotaRepository rotaRepository) {
+	public Rota nova(AeroportoRepository aeroportoRepository) {
 
 		Aeroporto aeroportoOrigem = aeroportoRepository.findById(idAeroportoOrigem).get();
 		Aeroporto aeroportoDestino = aeroportoRepository.findById(idAeroportoDestino).get();
 		
-		//verifica se já existe uma origem e destino cadastrado
-		Optional<Rota> possivelRota = rotaRepository.findByOrigemDestino(idAeroportoOrigem, idAeroportoDestino);
-		
-		
-		
-		if(idAeroportoOrigem ==  idAeroportoDestino || possivelRota.isPresent()) {
-			throw new ResourceDuplicatedException();
-		}
 
-		if (nome == null || nome.isEmpty()) {
-			//nome = aeroportoOrigem.getNome() + " - " + aeroportoDestino.getNome();
+		if (!StringUtils.hasText(nome)) {
 			return new Rota(aeroportoOrigem, aeroportoDestino, duracao);
 			
 		}
