@@ -16,7 +16,7 @@ public class OrigemDestinoIguaisRotaValidator implements Validator{
 	public void validate(Object target, Errors errors) {
 		RotaForm form = (RotaForm) target;
 
-		if(form.getIdAeroportoOrigem().equals(form.getIdAeroportoDestino())){
+		if(form.comparaRotas()){
 			errors.rejectValue("idAeroportoOrigem", null, "A rota de origem não pode ser a mesma de destino ");
 		}
 		

@@ -71,5 +71,9 @@ public class RotaForm {
 		return new Rota(nome, aeroportoOrigem, aeroportoDestino, duracao);
 
 	}
+	
+	public boolean comparaRotas() {
+		return idAeroportoOrigem.equals(idAeroportoDestino);
+	}
 
 }
