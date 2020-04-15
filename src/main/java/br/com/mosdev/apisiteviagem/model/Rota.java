@@ -17,6 +17,7 @@ public class Rota {
 	private Long id;
 	private String nome;
 	
+	
 	@ManyToOne
 	private Aeroporto aeroportoOrigem;
 	
@@ -24,6 +25,11 @@ public class Rota {
 	private Aeroporto aeroportoDestino;
 	
 	private @NotNull @Positive Integer duracao;
+	
+	private String escalaConexao;
+	
+	@Min(value=1)
+	private Integer tempoParada;
 	
 	@Deprecated
 	public Rota() {
@@ -42,6 +48,28 @@ public class Rota {
 		this.aeroportoOrigem = aeroportoOrigem;
 		this.aeroportoDestino = aeroportoDestino;
 		this.duracao = duracao;
+	}
+
+	public Rota(String nome, Aeroporto aeroportoOrigem, Aeroporto aeroportoDestino,
+			@NotNull @Min(1) Integer duracao, String escalaConexao) {
+		
+		this.nome= nome;
+		this.aeroportoOrigem = aeroportoOrigem;
+		this.aeroportoDestino = aeroportoDestino;
+		this.duracao = duracao;
+		this.escalaConexao = escalaConexao;
+		this.tempoParada = (Integer)duracao/4;
+	}
+
+	public Rota(Aeroporto aeroportoOrigem, Aeroporto aeroportoDestino, @NotNull @Min(1) Integer duracao,
+			String escalaConexao) {
+		
+		this.nome = aeroportoOrigem.getNome() +  " - "  + aeroportoDestino.getNome();
+		this.aeroportoOrigem = aeroportoOrigem;
+		this.aeroportoDestino = aeroportoDestino;
+		this.duracao = duracao;
+		this.escalaConexao = escalaConexao;
+		this.tempoParada = (Integer)duracao/4;
 	}
 
 	@Override
