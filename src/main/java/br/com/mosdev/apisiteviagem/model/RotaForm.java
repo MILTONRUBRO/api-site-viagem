@@ -24,6 +24,9 @@ public class RotaForm {
 	@NotNull
 	@Min(value=1)
 	private Integer duracao;
+	
+	private String escalaConexao;
+
 
 	public String getNome() {
 		return nome;
@@ -56,6 +59,14 @@ public class RotaForm {
 	public void setDuracao(Integer duracao) {
 		this.duracao = duracao;
 	}
+	
+	public String getEscalaConexao() {
+		return escalaConexao;
+	}
+
+	public void setEscalaConexao(String escalaConexao) {
+		this.escalaConexao = escalaConexao;
+	}
 
 	public Rota nova(AeroportoRepository aeroportoRepository) {
 
@@ -63,9 +74,13 @@ public class RotaForm {
 		Aeroporto aeroportoDestino = aeroportoRepository.findById(idAeroportoDestino).get();
 		
 
-		if (!StringUtils.hasText(nome)) {
+		if (!StringUtils.hasText(nome) && !StringUtils.hasText(escalaConexao)) {
 			return new Rota(aeroportoOrigem, aeroportoDestino, duracao);
 			
+		}else if(StringUtils.hasText(nome) && StringUtils.hasText(escalaConexao)){
+			return new Rota(nome, aeroportoOrigem, aeroportoDestino, duracao, escalaConexao);
+		}else if(!StringUtils.hasText(nome) && StringUtils.hasText(escalaConexao)) {
+			return new Rota(aeroportoOrigem, aeroportoDestino, duracao, escalaConexao);
 		}
 
 		return new Rota(nome, aeroportoOrigem, aeroportoDestino, duracao);
